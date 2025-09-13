@@ -1,6 +1,6 @@
 // app/api/subscribe/route.ts
+import { MY_SUBSCRIPTION, PLANS } from "@/lib/_store";
 import { NextResponse } from "next/server";
-import { MY_SUBSCRIPTION, PLANS } from "../_store";
 
 export async function POST(req: Request) {
   try {

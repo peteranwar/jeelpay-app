@@ -1,5 +1,5 @@
+import { PLANS } from '@/lib/_store';
 import { NextResponse } from 'next/server';
-import { PLANS } from '../_store';
 
 
 export async function GET(req: Request) {

@@ -1,5 +1,5 @@
+import { MY_SUBSCRIPTION } from "@/lib/_store";
 import { NextResponse } from "next/server";
-import { MY_SUBSCRIPTION } from "../_store";
 
 export async function PATCH(req: Request) {
   try {

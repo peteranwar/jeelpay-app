@@ -1,5 +1,5 @@
+import { MY_SUBSCRIPTION, PLANS } from "@/lib/_store";
 import { NextResponse } from "next/server";
-import { MY_SUBSCRIPTION, PLANS } from "../_store";
 
 export async function GET() {
   if (!MY_SUBSCRIPTION.planId) {
