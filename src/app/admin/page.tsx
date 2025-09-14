@@ -18,13 +18,17 @@ export default function AdminPage() {
   const { data, refetch } = usePlans();
 
   async function handleCreate(
-    values: Omit<Plan, "id">,
+    values: Omit<Plan['items'][0], "id">, 
     reset: () => void
   ) {
     try {
       setLoading(true);
 
-      const plan: Plan = { ...values, id: crypto.randomUUID() }; // Generate a unique ID
+      const plan: Plan['items'][0] = {
+        ...(values as unknown as Plan['items'][0]),
+        id: crypto.randomUUID(),
+      };
+
       await axios.post("/api/plans", plan, {
         headers: { "x-admin-token": process.env.NEXT_PUBLIC_ADMIN_TOKEN! },
       });
@@ -33,13 +37,13 @@ export default function AdminPage() {
       reset();
     } catch {
       toast.error("Failed to create plan");
-    }finally {
+    } finally {
       setLoading(false);
     }
   }
 
   async function handleDelete(id: string) {
-    
+
     try {
       setLoading(true);
       await axios.delete(`/api/plans/${id}`, {
@@ -49,7 +53,7 @@ export default function AdminPage() {
       refetch();
     } catch {
       toast.error("Failed to delete plan");
-    }finally {
+    } finally {
       setLoading(false);
     }
   }

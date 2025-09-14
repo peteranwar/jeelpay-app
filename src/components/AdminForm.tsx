@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -33,14 +32,12 @@ export default function AdminForm({ onSubmit }: AdminFormProps) {
       description: "",
       durationWeeks: 1,
       price: undefined,
-      tags: [],
+      tags: [""],
       modules: [{ id: "m1", title: "", lessons: [""] }],
     },
   });
 
-  // field arrays
-
-  // Modules
+  // Modules 
   const { fields: moduleFields, append: appendModule, remove: removeModule } =
     useFieldArray<PlanFormValues, "modules", "id">({
       control: form.control,
@@ -48,11 +45,14 @@ export default function AdminForm({ onSubmit }: AdminFormProps) {
     });
 
   // Tags
-  const { fields: tagFields, append: appendTag, remove: removeTag } =
-    useFieldArray<PlanFormValues, "tags">({
-      control: form.control,
-      name: "tags",
-    });
+  const tags = form.watch("tags") || [];
+
+  const addTag = () => form.setValue("tags", [...tags, ""]);
+  const removeTag = (index: number) =>
+    form.setValue(
+      "tags",
+      tags.filter((_, i) => i !== index)
+    );
 
   function handleSubmit(values: PlanFormValues) {
     onSubmit(values, () => form.reset());
@@ -62,7 +62,6 @@ export default function AdminForm({ onSubmit }: AdminFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-
         className="space-y-6 max-w-2xl mx-auto"
       >
         {/* Title */}
@@ -160,8 +159,8 @@ export default function AdminForm({ onSubmit }: AdminFormProps) {
         <div className="space-y-2">
           <FormLabel>Tags</FormLabel>
           <div className="space-y-2">
-            {tagFields.map((tag, index) => (
-              <div key={tag.id} className="flex gap-2">
+            {tags.map((_, index) => (
+              <div key={index} className="flex gap-2">
                 <FormField
                   control={form.control}
                   name={`tags.${index}`}
@@ -182,11 +181,7 @@ export default function AdminForm({ onSubmit }: AdminFormProps) {
                 </Button>
               </div>
             ))}
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => appendTag("")}
-            >
+            <Button type="button" variant="secondary" onClick={addTag}>
               + Add Tag
             </Button>
           </div>
